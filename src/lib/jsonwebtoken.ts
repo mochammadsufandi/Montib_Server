@@ -18,11 +18,16 @@ export const generateToken = (payload : jwtPayload) : string => {
 }
 
 export const verifyToken = (token : string) : JwtPayload | string => {
-    const loginUser = jwt.verify(token, JWT_SECRET_KEY);
-    if(typeof loginUser === "string") {
+    try {
+        const loginUser = jwt.verify(token, JWT_SECRET_KEY);
+        if(typeof loginUser === "string") {
+            return ""
+        } else {
+            return loginUser
+        }
+    } catch (error) {
+        console.log(error);
         return ""
-    } else {
-        return loginUser
     }
 }
 

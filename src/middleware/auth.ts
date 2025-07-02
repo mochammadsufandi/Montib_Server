@@ -6,7 +6,6 @@ export const authentication = async(req : Request, res : Response, next : NextFu
 
     try {
         const accessToken = req.cookies.accessCookie;
-        console.log(accessToken)
         if(!accessToken) {
             throw new CustomResponseError({
                 name : "Invalid Token",

@@ -1,29 +1,27 @@
 import { Request, Response, NextFunction } from "express";
-import Document from "../models/document.model";
 import DocumentService, { Documents } from "../service/documentService";
 
 class DocumentController {
 
     static async createDocuments(req : Request, res : Response, next : NextFunction) {
         try {
-            const params = req.body;
-            const document = new Document(params);
-            await document.save();
+            const data = req.body as Omit<Documents, "_id">;
+            await DocumentService.createDocument(data);
             res.status(200).json({
                 message : "Create Document is successfully",
-                params
+                data
             })
         } catch (error) {
-            res.status(500).json({
-                message : `Error : ${error}`
-            })
+           next(error)
         }
     }
 
     static async getDocumentsByClientId(req : Request, res : Response, next : NextFunction) {
         try {
-            const {clientId} = req.query as {clientId : string};
-            const documents = await DocumentService.getDocumentsByClientId(clientId);
+            const {clientId,tahun_dibuat,tahun_upload,jenis_surat } = req.query as {
+                clientId : string, tahun_dibuat : string, tahun_upload : string, jenis_surat : string
+            };
+            const documents = await DocumentService.getDocumentsByClientId(clientId, tahun_dibuat, tahun_upload, jenis_surat);
 
             res.status(200).json({
                 message : "Fetch Document is Successfully",
